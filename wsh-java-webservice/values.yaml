@@ -14,6 +14,20 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 150
+  successThreshold: 1
+
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 150
+  successThreshold: 1
+
 serviceAccount:
   create: true
   annotations: {}
