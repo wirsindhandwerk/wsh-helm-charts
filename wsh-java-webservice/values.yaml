@@ -2,6 +2,7 @@ debug: false
 timezone: Europe/Berlin
 
 replicaCount: 1
+maxUnavailable: 1
 
 image:
   registry: docker-registry.wirsindhandwerk.de
