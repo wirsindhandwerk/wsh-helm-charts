@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wsh-java-webservice.fullname" . }}
+  labels:
+    {{- include "wsh-java-webservice.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "wsh-java-webservice.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "wsh-java-webservice.selectorLabels" . | nindent 8 }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "wsh-java-webservice.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: -Xmx4G -Xms512m -Dfile.encoding=UTF-8 -Dspring.config.additional-location=file:///conf/webservice.properties
+              {{- if .Values.additionalConfigMaps -}}
+              {{- range $i, $configMap := .Values.additionalConfigMaps -}}
+              {{ print ",file:///conf/" $configMap.key }}
+              {{- end -}}
+              {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: timezone-config
+              mountPath: /etc/localtime
+            - name: cm-local
+              mountPath: /conf/webservice.properties
+              subPath: webservice.properties
+            {{- range $i, $configMap := .Values.additionalConfigMaps }}
+            - name: additional-configuration-{{ $i }}
+              mountPath: /conf/{{ $configMap.key }}
+              subPath: {{ $configMap.key }}
+            {{- end }}
+      volumes:
+        - name: timezone-config
+          hostPath:
+            path: /usr/share/zoneinfo/{{ .Values.timezone }}
+        - name: cm-local
+          configMap:
+            name: dedupe-webservice-properties
+        {{- range $i, $configMap := .Values.additionalConfigMaps }}
+        - name: additional-configuration-{{ $i }}
+          configMap:
+            name: {{ $configMap.name }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
