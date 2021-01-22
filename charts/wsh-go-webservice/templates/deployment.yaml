@@ -63,8 +63,8 @@ spec:
             - name: timezone-config
               mountPath: /etc/localtime
             - name: config
-              mountPath: /conf/webservice-config.yaml
-              subPath: webservice-config.yaml
+              mountPath: /conf/config.yaml
+              subPath: config.yaml
             {{- range $i, $configMap := .Values.additionalConfigMaps }}
             - name: additional-configuration-{{ $i }}
               mountPath: /conf/{{ $configMap.key }}
