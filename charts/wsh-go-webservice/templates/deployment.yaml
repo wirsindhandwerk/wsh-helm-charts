@@ -8,6 +8,8 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  strategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "wsh-go-webservice.selectorLabels" . | nindent 6 }}
@@ -35,18 +37,51 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.urlPrefix }}/probes/liveness
               port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.urlPrefix }}/probes/readiness
               port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: timezone-config
+              mountPath: /etc/localtime
+            - name: config
+              mountPath: /conf/webservice-config.yaml
+              subPath: webservice-config.yaml
+            {{- range $i, $configMap := .Values.additionalConfigMaps }}
+            - name: additional-configuration-{{ $i }}
+              mountPath: /conf/{{ $configMap.key }}
+              subPath: {{ $configMap.key }}
+            {{- end }}
+      volumes:
+        - name: timezone-config
+          hostPath:
+            path: /usr/share/zoneinfo/{{ .Values.timezone }}
+        - name: config
+          configMap:
+            name: {{ include "wsh-go-webservice.fullname" . }}
+        {{- range $i, $configMap := .Values.additionalConfigMaps }}
+        - name: additional-configuration-{{ $i }}
+          configMap:
+            name: {{ $configMap.name }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
