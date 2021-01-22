@@ -1,4 +1,4 @@
 #!/bin/bash
 
-helm package charts/* -d ./packages
+helm package charts/* -d ./repository
 helm repo index ./repository
