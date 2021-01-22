@@ -1,15 +1,27 @@
 apiVersion: v1
 entries:
+  wsh-go-webservice:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2021-01-22T15:09:59.593305435+01:00"
+    description: A Helm chart for Kubernetes
+    digest: 3a83a3c596340725f849d4d94be458f616e6b827c9fafcfb6b75907ae56c516e
+    icon: https://static.wirsindhandwerk.de/style/images/favicon/favicon-128.png
+    name: wsh-go-webservice
+    type: application
+    urls:
+    - packages/wsh-go-webservice-0.1.0.tgz
+    version: 0.1.0
   wsh-java-webservice:
   - apiVersion: v2
     appVersion: "1"
-    created: "2021-01-22T14:30:35.164900812+01:00"
+    created: "2021-01-22T15:09:59.593728035+01:00"
     description: A Helm chart for Kubernetes
-    digest: 14c0880d28a10c263dcd283061622a0f073ca6590b91fd2026c9d35222436f78
+    digest: eaa9b083395fcba60a30c411d95bf1acd2d10786d251ba63c230f0f5c1dad603
     icon: https://static.wirsindhandwerk.de/style/images/favicon/favicon-128.png
     name: wsh-java-webservice
     type: application
     urls:
     - packages/wsh-java-webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2021-01-22T14:30:35.163951026+01:00"
+generated: "2021-01-22T15:09:59.592879074+01:00"
