@@ -6,5 +6,6 @@ metadata:
     {{- include "wsh-java-webservice.labels" . | nindent 4 }}
 spec:
   selector:
-    {{- include "wsh-java-webservice.selectorLabels" . | nindent 4 }}
+    matchLabels:
+      {{- include "wsh-java-webservice.selectorLabels" . | nindent 6 }}
   maxUnavailable: {{ .Values.maxUnavailable }}
