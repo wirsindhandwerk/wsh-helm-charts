@@ -73,4 +73,6 @@ affinity: {}
 
 config: {}
 
+env: []
+
 additionalConfigMaps: []
