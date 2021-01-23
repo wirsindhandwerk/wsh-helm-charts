@@ -6,4 +6,4 @@ metadata:
 apiVersion: v1
 data:
   config.yaml: |-
-    {{ toYaml .Values.config | indent 4 }}
+    {{- toYaml .Values.config | nindent 4 }}

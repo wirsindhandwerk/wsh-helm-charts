@@ -2,6 +2,7 @@ timezone: Europe/Berlin
 
 urlPrefix: ""
 
+enableProbes: false
 replicaCount: 1
 maxUnavailable: 1
 
