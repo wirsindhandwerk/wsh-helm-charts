@@ -3,6 +3,17 @@ entries:
   wsh-go-webservice:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2021-01-23T22:28:21.099842745Z"
+    description: A Helm chart for Kubernetes
+    digest: a246a767fdabe2048932b6e343fcb64ccdfa3925c70a0187ec5f1a2b2b92a420
+    icon: https://static.wirsindhandwerk.de/style/images/favicon/favicon-128.png
+    name: wsh-go-webservice
+    type: application
+    urls:
+    - https://github.com/wirsindhandwerk/wsh-helm-charts/releases/download/wsh-go-webservice-0.2.2/wsh-go-webservice-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2021-01-23T22:01:30.333208511Z"
     description: A Helm chart for Kubernetes
     digest: 8429a3aba2f0cfdf4927499d9f1fbbfd1d986abf5876b9b67878420b6b2bf82d
