@@ -17,7 +17,7 @@ spec:
       {{- end }}
       labels:
         {{- include "wsh-java-webservice.selectorLabels" . | nindent 8 }}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
