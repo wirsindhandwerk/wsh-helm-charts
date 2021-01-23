@@ -81,7 +81,7 @@ spec:
             path: /usr/share/zoneinfo/{{ .Values.timezone }}
         - name: cm-local
           configMap:
-            name: dedupe-webservice-properties
+            name: {{ include "wsh-java-webservice.fullname" . }}
         {{- range $i, $configMap := .Values.additionalConfigMaps }}
         - name: additional-configuration-{{ $i }}
           configMap:
