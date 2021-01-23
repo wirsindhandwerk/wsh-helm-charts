@@ -37,7 +37,7 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          {{- with .Values.enableProbes }}
+          {{- if .Values.enableProbes }}
           livenessProbe:
             httpGet:
               path: {{ .Values.urlPrefix }}/probes/liveness
@@ -59,11 +59,11 @@ spec:
           {{- end }}
           {{- with .Values.resources }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.env }}
           env:
-            {{- toYaml .Values.env | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: timezone-config
