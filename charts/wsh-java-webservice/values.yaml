@@ -74,3 +74,10 @@ properties: {}
 additionalConfigMaps: []
   # - name: foo
   #   key: bar
+
+oauth: {}
+  # clientId: ""
+  # resourceId: ""
+  # redirectUri: ""
+  # scopes: ["read"]
+  # grantType: client_credentials

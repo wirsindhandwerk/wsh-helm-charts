@@ -10,6 +10,16 @@ data:
     server.port=80
     server.servlet.context-path={{ include "wsh-java-webservice.contextPath" . }}
 
+    {{- if .Values.oauth }}
+    {{- $clientId := default (include "wsh-java-webservice.name" .) .Values.oauth.clientId }}
+    security.oauth2.client.client-id={{ $clientId }}
+    wsh.oauth.resource.clientId={{ $clientId }}
+    wsh.oauth.resource.grantType={{ .Values.oauth.grantType }}
+    wsh.oauth.resource.scopes={{ join "," .Values.oauth.scopes }}
+    wsh.oauth.resource.id={{ default (include "wsh-java-webservice.name" .) .Values.oauth.resourceId }}
+    security.oauth2.client.pre-established-redirect-uri={{ required "OAuth redirect uri missing" .Values.oauth.redirectUri }}
+    {{- end }}
+
     {{- range $propKey, $propValue := .Values.properties }}
     {{ $propKey }}={{ $propValue }}
     {{- end }}
