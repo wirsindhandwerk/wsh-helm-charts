@@ -103,6 +103,17 @@ entries:
   wsh-java-webservice:
   - apiVersion: v2
     appVersion: "1"
+    created: "2021-01-25T09:10:01.411843991Z"
+    description: A Helm chart for Kubernetes
+    digest: 6bbc491424cefc44639aa60ef7808cddf40bd61204fa281c1513f28c916d72f0
+    icon: https://static.wirsindhandwerk.de/style/images/favicon/favicon-128.png
+    name: wsh-java-webservice
+    type: application
+    urls:
+    - https://github.com/wirsindhandwerk/wsh-helm-charts/releases/download/wsh-java-webservice-0.1.4/wsh-java-webservice-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: "1"
     created: "2021-01-23T22:54:42.84871839Z"
     description: A Helm chart for Kubernetes
     digest: e8130b1319c14221a8e4ef49eef07d83c03f2f605da48897127e743bb04a2d86
