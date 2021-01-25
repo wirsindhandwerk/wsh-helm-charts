@@ -60,3 +60,14 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Context path
+*/}}
+{{- define "wsh-java-webservice.contextPath" -}}
+{{- if .Values.service.contextPath }}
+{{- .Values.service.contextPath }}
+{{- else }}
+{{- printf "/%s" (include "wsh-java-webservice.name" .) }}
+{{- end }}
+{{- end }}
