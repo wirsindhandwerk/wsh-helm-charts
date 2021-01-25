@@ -10,6 +10,12 @@ data:
     server.port=80
     server.servlet.context-path={{ include "wsh-java-webservice.contextPath" . }}
 
+    {{- if .Values.datasource }}
+    spring.datasource.url={{ include "wsh-java-webservice.datasourceUrl" . }}
+    spring.datasource.username={{ .Values.datasource.username }}
+    spring.datasource.password={{ .Values.datasource.password }}
+    {{- end }}
+
     {{- if .Values.oauth }}
     {{- $clientId := default (include "wsh-java-webservice.name" .) .Values.oauth.clientId }}
     security.oauth2.client.client-id={{ $clientId }}

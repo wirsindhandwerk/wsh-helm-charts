@@ -75,6 +75,13 @@ additionalConfigMaps: []
   # - name: foo
   #   key: bar
 
+datasource: {}
+  # type: "postgres"  # postgres/mysql
+  # hostname: ""
+  # database: ""
+  # username: ""
+  # password: ""
+
 oauth: {}
   # clientId: ""
   # resourceId: ""
