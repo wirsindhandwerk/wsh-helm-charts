@@ -2,7 +2,10 @@ name: Chart Release
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - master
+    paths: 
+      - charts/**
   workflow_dispatch:
 
 jobs:
