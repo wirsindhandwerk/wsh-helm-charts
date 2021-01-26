@@ -3,6 +3,17 @@ entries:
   cli-tools:
   - apiVersion: v2
     appVersion: latest
+    created: "2021-01-26T20:33:38.104631449Z"
+    description: A Helm chart for Kubernetes
+    digest: b9c3fe778935f8579ef8f953199a2bc49f05bf0042501c1bab7f2f89b470e0d0
+    icon: https://static.wirsindhandwerk.de/style/images/favicon/favicon-128.png
+    name: cli-tools
+    type: application
+    urls:
+    - https://github.com/wirsindhandwerk/wsh-helm-charts/releases/download/cli-tools-0.1.3/cli-tools-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: latest
     created: "2021-01-26T17:28:26.290181723Z"
     description: A Helm chart for Kubernetes
     digest: 5861e5a348c61e84912714fd8de489700d540d8cc60000b76d0cf9871f9128da
