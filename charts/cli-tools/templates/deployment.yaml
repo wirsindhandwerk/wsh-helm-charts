@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cli-tools.fullname" . }}
+  labels:
+    {{- include "cli-tools.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "cli-tools.selectorLabels" . | nindent 6 }}
+  replicas: 1
+  strategy:
+    type: {{ .Values.updateStrategy }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cli-tools.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cli-tools.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c", "while true; do sleep 3; done"]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+          volumeMounts:
+            - name: timezone-config
+              mountPath: /etc/localtime
+            {{- if .Values.extraVolumeMounts }}
+            {{- .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+      restartPolicy: {{ .Values.restartPolicy }}
+      volumes:
+        - name: timezone-config
+          hostPath:
+            path: {{ printf "/usr/share/zoneinfo/%s" .Values.timezone }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
