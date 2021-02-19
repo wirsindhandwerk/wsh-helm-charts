@@ -5,6 +5,11 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "appname" -}}
+{{- $releaseName := default .Release.Name .Values.releaseOverride -}}
+{{- printf "%s" $releaseName | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -40,6 +45,8 @@ helm.sh/chart: {{ include "wsh-java-webservice.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+track: "{{ .Values.application.track }}"
+tier: "{{ .Values.application.tier }}"
 {{- end }}
 
 {{/*
@@ -48,6 +55,10 @@ Selector labels
 {{- define "wsh-java-webservice.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "wsh-java-webservice.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: {{ template "appname" . }}
+track: "{{ .Values.application.track }}"
+tier: "{{ .Values.application.tier }}"
+release: {{ .Release.Name }}
 {{- end }}
 
 {{/*

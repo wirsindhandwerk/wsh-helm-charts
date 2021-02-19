@@ -4,13 +4,27 @@ timezone: Europe/Berlin
 replicaCount: 1
 maxUnavailable: 1
 
-image:
-  registry: docker-registry.wirsindhandwerk.de
-  repository: wsh-history-webservice
-  pullPolicy: Always
-  tag: latest
+releaseOverride:
 
-imagePullSecrets: []
+gitlab:
+  app:
+  env:
+  envName:
+  envURL:
+
+application:
+  track: stable
+  tier: web
+  secretName:
+  secretChecksum:
+
+image:
+  repository: docker-registry.wirsindhandwerk.de/wsh-history-webservice
+  tag: latest
+  pullPolicy: Always
+  secrets:
+    - name: gitlab-registry
+
 nameOverride: ""
 fullnameOverride: ""
 
