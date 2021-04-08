@@ -94,7 +94,8 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: filebeat
-  namespace: logging2
+  # FIXME: namespace should be read dynamically
+  # namespace: logging2
 roleRef:
   kind: ClusterRole
   name: filebeat
