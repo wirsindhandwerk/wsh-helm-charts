@@ -12,7 +12,7 @@ spec:
   config:
     setup:
       kibana:
-        host: kibana-kb-http.logging2.svc:5601
+        host: kibana-kb-http.logging2.svc:5601 # FIXME this should not be hardcoded here.
         protocol: http
         path: {{ .Values.kibana.frontendPrefix }}
     filebeat:
