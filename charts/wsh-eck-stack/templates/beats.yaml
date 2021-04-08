@@ -12,8 +12,7 @@ spec:
   config:
     setup:
       kibana:
-        # host: kibana-kb-http.{{ .Release.Namespace }}.svc:5601
-        host: kibana-kb-http:5601
+        host: kibana-kb-http.{{ .Release.Namespace }}.svc:5601
         protocol: http
         path: {{ .Values.kibana.frontendPrefix }}
     filebeat:
