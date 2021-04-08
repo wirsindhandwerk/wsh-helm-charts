@@ -1,6 +1,8 @@
 eck-operator:
   enabled: true
   installCRDs: false
+  createClusterScopedResources: false
+  managedNamespaces: {}
 
 # FIXME: for each entry in this config map, a user should be managed in the elasticsearch cluster.
 # the position is not relevant. could be kibana.users or elasticsearch.users too.
