@@ -1,19 +1,31 @@
 eck-operator:
   enabled: true
+  # the CRDs may already be installed in the cluster from other namespaces
   installCRDs: false
+  # same as CRDs, these may already be available.
   createClusterScopedResources: false
   managedNamespaces: []
+  # whether to enable the webhook.
   webhook:
     enabled: false
   config:
     validateStorageClass: false
 
 # FIXME: for each entry in this config map, a user should be managed in the elasticsearch cluster.
-# the position is not relevant. could be kibana.users or elasticsearch.users too.
 users:
-  elastic: master-user-password
-  user1: foo
-  user2: bar
+  # configure the elastic master user too
+  # elastic-admin: elastic
+  elastic-admin: "$2y$10$nu6Gy1yMjVXKuV7u6s1GcO4egqJZLHMtazMsyyj0O6uDB9vFu0/vq"
+  # example-user: example-password
+  example-user: "$2y$10$OrZF7nYE37TBmblHsKRTz.vsrzuI3PwpIzn94F5Hhl/gfW.CblhcG"
+  # foo: bar
+  foo: "$2y$10$XfUHfcdluEe6wAIFnd1NIu2vBGn7lZQ0x2NaSBi.hIB.pVwQVK8SC"
+
+user_roles:
+  admin: elastic-admin
+  kibana: example-user,foo
+
+    
 
 # FIXME: configurable rollover for indexes. 
 # can be done per index (the filebeat index is the important one here)

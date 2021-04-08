@@ -2,7 +2,10 @@
 
 TODO
 
-## storageclass
+# Prerequisites 
+
+The following prerequisites should be configured outside of the chart
+## `elasticsearch.data.storageClassName`
 
 example StorageClass for elasticsearch 
 ```yaml
@@ -17,3 +20,11 @@ parameters:
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer
 
+```
+
+This `StorageClass` is then referenced in `elasticsearch.data.storageClassName`
+
+
+## `kibana.frontendPrefix`
+
+This is used to load kibana in the frontend
