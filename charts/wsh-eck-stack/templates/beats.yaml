@@ -12,7 +12,8 @@ spec:
   config:
     setup:
       kibana:
-        host: kibana-kb-http.logging2.svc:5601 # FIXME this should not be hardcoded here.
+        # host: kibana-kb-http.{{ .Release.Namespace }}.svc:5601
+        host: kibana-kb-http:5601
         protocol: http
         path: {{ .Values.kibana.frontendPrefix }}
     filebeat:
@@ -36,7 +37,7 @@ spec:
   daemonSet:
     podTemplate:
       spec:
-        serviceAccountName: {{ .Values.filebeat.serviceAccountName }}
+        serviceAccountName: filebeat-{{ .Release.Namespace }}
         automountServiceAccountToken: true
         terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirstWithHostNet
