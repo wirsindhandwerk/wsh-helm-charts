@@ -15,6 +15,10 @@ users:
   user1: foo
   user2: bar
 
+filebeat:
+  createServiceAccount: false
+  serviceAccountName: filebeat
+
 # FIXME: configurable rollover for indexes. 
 # can be done per index (the filebeat index is the important one here)
 # -> roll over the index every 5GB so that automated rebalancing of data nodes works better,

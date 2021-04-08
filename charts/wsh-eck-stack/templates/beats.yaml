@@ -36,7 +36,7 @@ spec:
   daemonSet:
     podTemplate:
       spec:
-        serviceAccountName: filebeat
+        serviceAccountName: {{ .Values.filebeat.serviceAccountName }}
         automountServiceAccountToken: true
         terminationGracePeriodSeconds: 30
         dnsPolicy: ClusterFirstWithHostNet
@@ -67,36 +67,4 @@ spec:
         - name: varlibdockercontainers
           hostPath:
             path: /var/lib/docker/containers
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: filebeat
-rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources:
-  - namespaces
-  - pods
-  verbs:
-  - get
-  - watch
-  - list
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: filebeat
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: filebeat
-subjects:
-- kind: ServiceAccount
-  name: filebeat
-  # FIXME: namespace should be read dynamically
-  # namespace: logging2
-roleRef:
-  kind: ClusterRole
-  name: filebeat
-  apiGroup: rbac.authorization.k8s.io
+
