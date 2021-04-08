@@ -2,7 +2,7 @@ eck-operator:
   enabled: true
   installCRDs: false
   createClusterScopedResources: false
-  managedNamespaces: {}
+  managedNamespaces: []
   webhook:
     enabled: false
   config:
