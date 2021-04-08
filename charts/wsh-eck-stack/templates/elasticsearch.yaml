@@ -1,0 +1,72 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+spec:
+  version: 7.11.1
+  nodeSets:
+    - name: masters
+      count: {{ .Values.elasticsearch.master.replicas }}
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-master
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
+            storageClassName: elasticsearch
+      podTemplate: &pod_template
+        spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: node.kubernetes.io/instance-type
+                      operator: In
+                      values:
+                        - m4.4xlarge
+                        - m4.2xlarge
+            #podAffinity:
+            #  requiredDuringSchedulingIgnoredDuringExecution:
+            #    - labelSelector:
+            #      matchExpressions:
+            #        - key: app
+            #          operator: In
+            #          values:
+            #            - elasticsearch
+            #      topologyKey: topology.kubernetes.io/zone
+          containers:
+            - name: elasticsearch
+              env:
+              - name: ES_JAVA_OPTS
+                value: -Xms2g -Xmx2g
+              resources:
+                requests:
+                  memory: 2Gi
+                  cpu: 0.25
+                limits:
+                  memory: 3Gi
+                  cpu: 1
+      config:
+        node.roles: ["master"]
+        xpack.ml.enabled: true
+        xpack.security.enabled: true
+    - name: data
+      count: {{ .Values.elasticsearch.data.replicas }}
+      podTemplate:
+        <<: *pod_template
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: {{ .Values.elasticsearch.data.storage }}
+            storageClassName: {{ .Values.elasticsearch.data.storageClassName }}
+      config:
+        node.roles: ["data", "ingest", "ml", "transform"]
