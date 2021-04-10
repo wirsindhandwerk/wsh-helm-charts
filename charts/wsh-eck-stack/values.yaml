@@ -22,8 +22,8 @@ users:
   foo: "$2y$10$XfUHfcdluEe6wAIFnd1NIu2vBGn7lZQ0x2NaSBi.hIB.pVwQVK8SC"
 
 user_roles:
-  admin: elastic-admin
-  kibana: example-user,foo
+  superuser: example-user
+  kibana_admin: example-user,foo
 
     
 

@@ -4,6 +4,9 @@ metadata:
   name: elasticsearch
 spec:
   version: 7.11.1
+  auth:
+    fileRealm:
+    - secretName: es-users  
   nodeSets:
     - name: masters
       count: {{ .Values.elasticsearch.master.replicas }}
