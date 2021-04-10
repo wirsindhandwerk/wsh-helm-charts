@@ -1,3 +1,4 @@
+{{- $root := . -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -17,4 +18,8 @@ spec:
         args:
         - /bin/sh
         - -c
-        - "sleep 30 ; curl -X PUT -u 'example-user:$2y$10$OrZF7nYE37TBmblHsKRTz.vsrzuI3PwpIzn94F5Hhl/gfW.CblhcG' -k 'https://elasticsearch-es-http.{{ .Release.Namespace }}.svc.cluster.local:9200/_ilm/policy/ilm_custom_policy' -H 'Content-Type: application/json' -d'{\"policy\":{\"phases\":{\"hot\":{\"actions\":{\"rollover\":{\"max_size\":\"{{ .Values.indexLifecycle.rollover }}\",\"max_age\":\"{{ .Values.indexLifecycle.deleteAfterDays }}\"}}},\"delete\":{\"min_age\":\"14d\",\"actions\":{\"delete\":{}}}}}}'; exit 0"
+        {{- range $username, $password := .Values.users }}
+        {{ if eq $username "example-user" }}    
+        - "sleep 60 ;curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/_ilm/policy/ilm_custom_policy' -H 'Content-Type: application/json' -d'{\"policy\":{\"phases\":{\"hot\":{\"actions\":{\"rollover\":{\"max_size\":\"{{ $root.Values.indexLifecycle.rollover }}\",\"max_age\":\"{{ $root.Values.indexLifecycle.deleteAfterDays }}\"}}},\"delete\":{\"min_age\":\"14d\",\"actions\":{\"delete\":{}}}}}}'; exit 0"
+        {{ end }}
+        {{ end }}
