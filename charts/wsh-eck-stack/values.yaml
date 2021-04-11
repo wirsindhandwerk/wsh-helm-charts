@@ -34,7 +34,8 @@ user_roles:
 # -> purge / delete logs to free up space after x days, 14 should be the default.
 indexLifecycle:
   rollover: 5GB
-  deleteAfterDays: 14d # example
+  indexMaxAge: 5d # example
+  indexMinAge: 14d
 
 # the frontend is automatically integrated into the upstream nginx
 kibana:
