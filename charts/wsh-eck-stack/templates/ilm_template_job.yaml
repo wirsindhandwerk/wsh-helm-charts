@@ -1,0 +1,25 @@
+{{- $root := . -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: imlpolicytempalte
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      name: imlpolicytempalte
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: post-install-job
+        image: "curlimages/curl:7.76.0"
+        args:
+        - /bin/sh
+        - -c
+        {{- range $username, $password := .Values.users }}
+        {{ if eq $username "internal-api-user" }}    
+        - "sleep 90 ;curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/_template/ilm_custom_template' -H 'Content-Type: application/json' -d '{\"index_patterns\":[\"filebeat-*\"],\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":1,\"index.lifecycle.name\":\"ilm_custom_policy\",\"index.lifecycle.rollover_alias\":\"ilm_custom\"}}';curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/filebeat-*/_settings' -H 'Content-Type: application/json' -d'{\"index\":{\"lifecycle\":{\"name\":\"ilm_custom_policy\"}}}';exit 0"
+        {{ end }}
+        {{ end }}
