@@ -6,6 +6,7 @@ metadata:
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "3"
 spec:
   template:
     metadata:
@@ -19,7 +20,7 @@ spec:
         - /bin/sh
         - -c
         {{- range $username, $password := .Values.users }}
-        {{ if eq $username "internal-api-user" }}    
-        - "sleep 90 ;curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/_template/ilm_custom_template' -H 'Content-Type: application/json' -d '{\"index_patterns\":[\"filebeat-7.9.2-*\"],\"order\":1,\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":1,\"index.lifecycle.name\":\"ilm_custom_policy\",\"index.lifecycle.rollover_alias\":\"filebeat-7.9.2\"}}'; curl -X POST -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/filebeat-7.9.2-*/_ilm/remove';curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/filebeat-*/_settings' -H 'Content-Type: application/json' -d'{\"index\":{\"lifecycle\":{\"name\":\"ilm_custom_policy\"}}}';exit 0"
+        {{ if eq $username "internal-api-user" }}
+        - "sleep 12 ;curl -X POST -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/filebeat-7.9.2-*/_ilm/remove';curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/_template/ilm_custom_template' -H 'Content-Type: application/json' -d '{\"index_patterns\":[\"filebeat-7.9.2-*\"],\"order\":1,\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":1,\"index.lifecycle.name\":\"ilm_custom_policy\",\"index.lifecycle.rollover_alias\":\"filebeat-7.9.2\"}}';curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/filebeat-*/_settings' -H 'Content-Type: application/json' -d'{\"index\":{\"lifecycle\":{\"name\":\"ilm_custom_policy\",\"rollover_alias\": \"filebeat-7.9.2\"}}}';exit 0"
         {{ end }}
         {{ end }}

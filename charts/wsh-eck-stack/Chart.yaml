@@ -2,7 +2,7 @@ apiVersion: v2
 name: wsh-eck-stack
 description: A Helm chart for elasticsearch with customizations for wirsindhandwerk
 type: application
-version: 0.1.18
+version: 0.1.19
 appVersion: "1.16.0"
 icon: https://static.wsh.de/2.0.78/assets/images/favicon/favicon-128.png
 dependencies:
