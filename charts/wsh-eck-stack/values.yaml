@@ -11,7 +11,7 @@ eck-operator:
   config:
     validateStorageClass: false
 
-# FIXME: for each entry in this config map, a user should be managed in the elasticsearch cluster.
+# for each entry in this config map, a user should be managed in the elasticsearch cluster.
 users:
   # configure the elastic master user too
   # elastic-admin: elastic
@@ -27,7 +27,7 @@ user_roles:
 
     
 
-# FIXME: configurable rollover for indexes. 
+# configurable rollover for indexes. 
 # can be done per index (the filebeat index is the important one here)
 # -> roll over the index every 5GB so that automated rebalancing of data nodes works better,
 # which could allow us to better reduce / increase the storage size according to current needs.
