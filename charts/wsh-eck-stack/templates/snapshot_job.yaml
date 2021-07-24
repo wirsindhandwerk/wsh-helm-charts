@@ -1,0 +1,28 @@
+{{- if eq .Values.snapshot.enabled true }}
+{{- $root := . -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: snapshot
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "-2"
+spec:
+  template:
+    metadata:
+      name: snapshot
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: post-install-job
+        image: "curlimages/curl:7.76.0"
+        args:
+        - /bin/sh
+        - -c
+        {{- range $username, $password := .Values.users }}
+        {{ if eq $username "example-user" }}    
+        - "sleep 100 ;curl -X PUT -u '{{ $username }}:{{ $password }}' -k 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/_snapshot/s3backups' -H 'Content-Type: application/json' -d'{\"type\": \"s3\",\"settings\": {\"bucket\": \"{{ $root.Values.snapshot.bucket }}\",\"region\": \"{{ $root.Values.snapshot.region }}\",\"base_path\": \"{{ $root.Values.snapshot.base_path }}\"}}';exit 0"
+        {{ end }}
+        {{ end }}
+{{ end }}        

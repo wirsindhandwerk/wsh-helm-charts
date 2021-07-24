@@ -39,6 +39,14 @@ indexLifecycle:
   delete:
      indexMinAge: 14d
 
+# snapshot configuration for s3 repository. s3 k8s secret is prerequisite before enable this 
+snapshot:
+  enabled: false
+  bucket: "wshessnapshots"
+  region: "us-east-1"
+  base_path: "dev"
+  schedule: "*/5 * * * *"      
+
 # the frontend is automatically integrated into the upstream nginx
 kibana:
   frontendPrefix: /logs
