@@ -1,0 +1,28 @@
+{{- if eq .Values.snapshot.enabled true }}
+{{- $root := . -}}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: es-snapshotter
+spec:
+  schedule: "{{ $root.Values.snapshot.schedule }}"
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: snapshotter
+            image: centos:7
+            args:
+            - /bin/bash
+            - -c
+            {{- range $username, $password := .Values.users }}
+            {{ if eq $username "example-user" }}              
+            - "curl -s -i -k -u '{{ $username }}:{{ $password }}' -XPUT 'https://elasticsearch-es-http.{{ $root.Release.Namespace }}.svc.cluster.local:9200/_snapshot/s3backups/%3Csnapshot-%7Bnow%7Byyyy-MM-dd_HH-mm-ss%7D%7D%3E' | tee /dev/stderr | grep '200 OK'"
+            {{ end }}
+            {{ end }}
+          restartPolicy: OnFailure
+{{ end }}          
+          
