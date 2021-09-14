@@ -29,10 +29,9 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: kibana-advanced-config
-          image: "debian:11-slim"
-          args:
-            - /bin/bash
-            - /kibana-advanced-config/configure.sh
+          image: "curlimages/curl:7.76.0"
+          command: ["/bin/ash"]
+          args: ["/kibana-advanced-config/configure.sh"]
           volumeMounts:
             - name: kibana-advanced-config
               mountPath: /kibana-advanced-config
