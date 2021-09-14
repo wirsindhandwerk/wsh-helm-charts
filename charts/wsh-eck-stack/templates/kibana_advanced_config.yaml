@@ -29,7 +29,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: kibana-advanced-config
-          image: "curlimages/curl:7.76.0"
+          image: "debian:11-slim"
           args:
             - /bin/bash
             - /kibana-advanced-config/configure.sh
