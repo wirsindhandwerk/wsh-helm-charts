@@ -1,0 +1,44 @@
+{{- if .Values.kibana.advancedSettings -}}
+{{- $frontendPrefix := .Values.kibana.frontendPrefix -}}
+{{- $username := "internal-api-user" -}}
+{{- $password := index .Values.users $username | required (printf "found no password for user '%s'" $username) -}}
+{{- $basicAuth := printf "%s:%s" $username $password -}}
+---
+kind: ConfigMap
+metadata:
+  name: kibana-advanced-config
+apiVersion: v1
+data:
+  configure.sh: |-
+    {{- range $key, $value := .Values.kibana.advancedSettings }}
+    {{- $url := printf "http://kibana-kb-http:5601%s/api/kibana/settings/%s" $frontendPrefix $key }}
+    curl -X POST -u {{ $basicAuth }} -H "Content-Type: application/json" -H "kbn-xsrf: true" -d '{"value": {{ $value | toJson }}}' {{ $url }}
+    {{- end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "kibana-advanced-config"
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: kibana-advanced-config
+          image: "curlimages/curl:7.76.0"
+          args:
+            - /bin/bash
+            - /kibana-advanced-config/configure.sh
+          volumeMounts:
+            - name: kibana-advanced-config
+              mountPath: /kibana-advanced-config
+      volumes:
+        - name: kibana-advanced-config
+          configMap:
+            name: kibana-advanced-config
+      restartPolicy: Never
+{{- end -}}

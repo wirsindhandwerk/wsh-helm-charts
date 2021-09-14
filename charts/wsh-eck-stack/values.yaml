@@ -50,6 +50,7 @@ kibana:
     limits:
       memory: 1Gi
       cpu: 0.5
+  advancedSettings: {}
 
 elasticsearch:
   master:
