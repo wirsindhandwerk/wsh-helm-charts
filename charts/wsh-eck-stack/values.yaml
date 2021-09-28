@@ -25,9 +25,9 @@ user_roles:
   superuser: example-user
   kibana_admin: example-user,foo
 
-    
 
-# configurable rollover for indexes. 
+
+# configurable rollover for indexes.
 # can be done per index (the filebeat index is the important one here)
 # -> roll over the index every 5GB so that automated rebalancing of data nodes works better,
 # which could allow us to better reduce / increase the storage size according to current needs.
@@ -61,3 +61,6 @@ elasticsearch:
     storage: 100Gi
     # configure your own storage class
     storageClassName: default
+
+filebeat:
+  fieldConversions: []

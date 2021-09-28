@@ -34,6 +34,10 @@ spec:
         target: ""  # merge into the root
         add_error_key: true
         overwrite_keys: true
+    - convert:
+        fields: {{ .Values.filebeat.fieldConversions | toJson }}
+        ignore_missing: true
+
   daemonSet:
     podTemplate:
       spec:
