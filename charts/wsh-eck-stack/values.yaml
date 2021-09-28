@@ -63,4 +63,4 @@ elasticsearch:
     storageClassName: default
 
 filebeat:
-  fieldConversions: []
+  extraProcessors: []

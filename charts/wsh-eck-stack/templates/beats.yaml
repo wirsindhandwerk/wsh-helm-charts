@@ -34,9 +34,9 @@ spec:
         target: ""  # merge into the root
         add_error_key: true
         overwrite_keys: true
-    - convert:
-        fields: {{ .Values.filebeat.fieldConversions | toJson }}
-        ignore_missing: true
+    {{- if .Values.filebeat.extraProcessors }}
+    {{- .Values.filebeat.extraProcessors | toYaml | nindent 4 }}
+    {{- end }}
 
   daemonSet:
     podTemplate:
