@@ -50,6 +50,8 @@ spec:
         - name: filebeat
           securityContext:
             runAsUser: 0
+          resources:
+           {{- toYaml .Values.filebeat.resources | nindent 12 }}
           volumeMounts:
           - name: varlogcontainers
             mountPath: /var/log/containers
