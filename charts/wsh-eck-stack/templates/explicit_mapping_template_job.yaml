@@ -37,7 +37,7 @@ spec:
           args: [
             "--request", "PUT",
             "--user", "{{ $basicAuth }}",
-            "--header", "Content-Type: application/json"
+            "--header", "Content-Type: application/json",
             "--data", "@/conf/mappings.json",
             "--insecure",
             "https://elasticsearch-es-http.{{ .Release.Namespace }}.svc.cluster.local:9200/_template/explicit_mappings"
