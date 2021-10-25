@@ -1,0 +1,46 @@
+{{- if .Values.explicitMappings -}}
+{{- $username := "internal-api-user" -}}
+{{- $password := index .Values.users $username | required (printf "found no password for user '%s'" $username) -}}
+{{- $basicAuth := printf "%s:%s" $username $password -}}
+---
+kind: ConfigMap
+metadata:
+  name: explicit-mapping-template
+apiVersion: v1
+data:
+  mappings.json: |-
+    {
+      "order": 3,
+      "index_patterns": [
+        "filebeat-7.9.2-*"
+      ],
+      "mappings": {
+        "properties": {{ .Values.explicitMappings | toJson }}
+      }
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: explicit-mapping-template
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: explicit-mapping-template
+          image: "curlimages/curl:7.76.0"
+          args: ["-d", "@/conf/mappings.json", "http://elasticsearch-es-http:9200/_template/explicit_mappings"]
+          volumeMounts:
+            - name: explicit-mapping-template
+              mountPath: /conf
+      volumes:
+        - name: explicit-mapping-template
+          configMap:
+            name: explicit-mapping-template
+      restartPolicy: Never
+{{- end -}}

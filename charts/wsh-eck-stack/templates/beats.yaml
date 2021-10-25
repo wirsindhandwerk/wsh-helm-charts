@@ -34,8 +34,17 @@ spec:
         target: ""  # merge into the root
         add_error_key: true
         overwrite_keys: true
-    {{- if .Values.filebeat.extraProcessors }}
-    {{- .Values.filebeat.extraProcessors | toYaml | nindent 4 }}
+    {{- if .Values.explicitMappings }}
+    - convert:
+        fields:
+        {{- range $field, $info := .Values.explicitMappings }}
+        {{- if not (has $info.type (list "integer" "long" "float" "double" "string" "boolean")) }}
+        {{- fail (printf "type %s is not allowed in explicit mapping of field %s" $info.type $field) }}
+        {{- end }}
+          - from: {{ $field }}
+            type: {{ $info.type }}
+        {{- end }}
+        ignore_missing: true
     {{- end }}
 
   daemonSet:

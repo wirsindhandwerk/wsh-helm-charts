@@ -39,6 +39,8 @@ indexLifecycle:
   delete:
      indexMinAge: 14d
 
+explicitMappings: {}
+
 # the frontend is automatically integrated into the upstream nginx
 kibana:
   frontendPrefix: /logs
