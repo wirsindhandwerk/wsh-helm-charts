@@ -34,7 +34,14 @@ spec:
       containers:
         - name: explicit-mapping-template
           image: "curlimages/curl:7.76.0"
-          args: ["-X", "PUT", "-u", "{{ $basicAuth }}", "-k", "-d", "@/conf/mappings.json", "https://elasticsearch-es-http.{{ .Release.Namespace }}.svc.cluster.local:9200/_template/explicit_mappings"]
+          args: [
+            "--request", "PUT",
+            "--user", "{{ $basicAuth }}",
+            "--header", "Content-Type: application/json"
+            "--data", "@/conf/mappings.json",
+            "--insecure",
+            "https://elasticsearch-es-http.{{ .Release.Namespace }}.svc.cluster.local:9200/_template/explicit_mappings"
+          ]
           volumeMounts:
             - name: explicit-mapping-template
               mountPath: /conf
