@@ -37,6 +37,22 @@ entries:
   wsh-eck-stack:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2021-10-25T14:50:15.339702762Z"
+    dependencies:
+    - condition: eck-operator.enabled
+      name: eck-operator
+      repository: https://helm.elastic.co
+      version: ~1.4.0
+    description: A Helm chart for elasticsearch with customizations for wirsindhandwerk
+    digest: 1a8f24986ec1691af9637cd9de45314610a9d082caa1aeffbcc6c3ec2bec0b5b
+    icon: https://static.wsh.de/2.0.78/assets/images/favicon/favicon-128.png
+    name: wsh-eck-stack
+    type: application
+    urls:
+    - https://github.com/wirsindhandwerk/wsh-helm-charts/releases/download/wsh-eck-stack-0.1.35/wsh-eck-stack-0.1.35.tgz
+    version: 0.1.35
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2021-10-25T14:33:03.272390854Z"
     dependencies:
     - condition: eck-operator.enabled
@@ -774,4 +790,4 @@ entries:
     urls:
     - https://github.com/wirsindhandwerk/wsh-helm-charts/releases/download/wsh-java-webservice-0.1.0/wsh-java-webservice-0.1.0.tgz
     version: 0.1.0
-generated: "2021-10-25T14:33:03.27277006Z"
+generated: "2021-10-25T14:50:15.340021863Z"
