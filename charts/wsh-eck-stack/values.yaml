@@ -63,6 +63,13 @@ elasticsearch:
     storage: 100Gi
     # configure your own storage class
     storageClassName: default
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 0.25
+    limits:
+      memory: 3Gi
+      cpu: 1
 
 filebeat:
   resources:

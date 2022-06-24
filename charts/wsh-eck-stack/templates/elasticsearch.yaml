@@ -6,7 +6,7 @@ spec:
   version: 7.11.1
   auth:
     fileRealm:
-    - secretName: es-users  
+    - secretName: es-users
   nodeSets:
     - name: masters
       count: {{ .Values.elasticsearch.master.replicas }}
@@ -47,12 +47,7 @@ spec:
               - name: ES_JAVA_OPTS
                 value: -Xms2g -Xmx2g
               resources:
-                requests:
-                  memory: 2Gi
-                  cpu: 0.25
-                limits:
-                  memory: 3Gi
-                  cpu: 1
+                {{- toYaml .Values.elasticsearch.resources | nindent 16 }}
       config:
         node.roles: ["master"]
         xpack.ml.enabled: true
