@@ -72,6 +72,7 @@ elasticsearch:
       cpu: 1
 
 filebeat:
+  enabled: true
   resources:
     requests:
       memory: 200Mi

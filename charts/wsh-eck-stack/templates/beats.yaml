@@ -1,3 +1,4 @@
+{{- if .Values.filebeat.enabled -}}
 apiVersion: beat.k8s.elastic.co/v1beta1
 kind: Beat
 metadata:
@@ -83,3 +84,4 @@ spec:
         - name: varlibdockercontainers
           hostPath:
             path: /var/lib/docker/containers
+{{- end -}}
